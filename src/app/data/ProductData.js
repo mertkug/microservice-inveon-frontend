@@ -10,6 +10,7 @@ import img8 from '../../assets/img/product-image/product8.png'
 import img9 from '../../assets/img/product-image/product9.png'
 import img10 from '../../assets/img/product-image/product10.png'
 
+
 export const ProductData = [
     {
         id: 1,
@@ -331,7 +332,4 @@ export const ProductData = [
             },
         ]
     },
-
-
-    
 ]

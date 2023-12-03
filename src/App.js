@@ -1,10 +1,12 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
+import { createApi } from "@reduxjs/toolkit/query";
 import loadable from "./components/Common/loadable";
 import pMinDelay from "p-min-delay";
 import Loader from "./components/Common/Loader";
 import './assets/css/style.css';
 import './assets/css/animate.min.css';
 import './assets/css/color.css';
+const CallbackPage = loadable(() => pMinDelay(import('./components/CallbackPage'), 250), { fallback: <Loader /> });
 const Fashion = loadable(() => pMinDelay(import('./page/'), 250), { fallback: <Loader /> });
 const Register = loadable(() => pMinDelay(import('./page/register'), 250), { fallback: <Loader /> });
 const ProductDetailsTwos = loadable(() => pMinDelay(import('./page/Product/product-details-two'), 250), { fallback: <Loader /> });
@@ -20,6 +22,7 @@ const CheckoutTwos = loadable(() => pMinDelay(import('./page/checkout/checkout-t
 const CustomerOrder = loadable(() => pMinDelay(import('./page/my-account/customer-order'), 250), { fallback: <Loader /> });
 const CustomerAddress = loadable(() => pMinDelay(import('./page/my-account/customer-address'), 250), { fallback: <Loader /> });
 const CustomerAccountDetails = loadable(() => pMinDelay(import('./page/my-account/customer-account-details'), 250), { fallback: <Loader /> });
+
 function App() {
   return (
     <div >
@@ -29,6 +32,9 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/wishlist" element={<Favorites />} />
+
+          <Route path="/callback" element={<CallbackPage />} />
+          <Route path="/signout-callback-oidc" element={ <Navigate to="/" /> } />
 
           <Route path="/login" element={<Login />} />
           <Route path="/product-details-two/:id" element={<ProductDetailsTwos />} />

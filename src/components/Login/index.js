@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom"
 const LoginArea = () => {
     let dispatch = useDispatch();
     const history = useNavigate()
+    const [username, setUsername] = React.useState('');
+    const [pass, setPass] = React.useState('')
 
     let status = useSelector((state) => state.user.status);
     let user = useSelector((state) => state.user.user);
@@ -29,7 +31,7 @@ const LoginArea = () => {
                   // not clicked
                 }
               });
-        }else{
+        } else {
             dispatch({ type: "user/login" })
             let name = user.name || 'Customer'
             console.log(typeof(user.name));
@@ -55,11 +57,11 @@ const LoginArea = () => {
                                 <form onSubmit={(e)=>{e.preventDefault();login()}}>
                                     <div className="default-form-box">
                                         <label>Kullanıcı adı veya Email<span className="text-danger">*</span></label>
-                                        <input type="text" className="form-control" required defaultValue="ibr@ibr.com"/>
+                                        <input type="text" className="form-control" required value={username} onChange={(e) => { setUsername(e.target.value)} }/>
                                     </div>
                                     <div className="default-form-box">
                                         <label>Şifre<span className="text-danger">*</span></label>
-                                        <input type="password" className="form-control" required defaultValue="123456" minLength="8"/>
+                                        <input type="password" className="form-control" required value={pass} onChange={(e) => { setPass(e.target.value)}} minLength="8"/>
                                     </div>
                                     <div className="login_submit">
                                         <button className="theme-btn-one btn-black-overlay btn_md" type="submit">Giriş Yap</button>

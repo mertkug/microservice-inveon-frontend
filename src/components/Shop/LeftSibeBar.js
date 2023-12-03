@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 import SideBar from './SideBar'
 import ProductCard from '../Common/Product/ProductCard'
 import { useSelector } from "react-redux";
+import {useGetAllProductsQuery} from "../../services/product-api";
 const LeftSideBar = () => {
    
     const [products, setProducts] = useState(useSelector((state) => state.products.products))
     const [page, setPage] = useState(1)
     let allData = [...useSelector((state) => state.products.products)];
 
+    let {data, isLoading} = useGetAllProductsQuery();
     const randProduct = (page) => {
         if(page){
             let data = allData.sort((a, b) => 0.5 - Math.random())
@@ -19,13 +21,14 @@ const LeftSideBar = () => {
 
     return (
         <>
+
             <section id="shop_main_area" className="ptb-100">
                 <div className="container">
                     <div className="row">
                         <SideBar filterEvent={randProduct}/>
                         <div className="col-lg-9">
                             <div className="row">
-                                {products.slice(0,12).map((data, index) => (
+                                {isLoading ? <div>Loading..</div> : data?.result.map((data, index) => (
                                     <div className="col-lg-4 col-md-4 col-sm-6 col-12" key={index}>
                                         <ProductCard data={data} />
                                     </div>

@@ -1,23 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
+import userManager from "../../userManager";
 
 const userSlice = createSlice({
     name: 'user',
     initialState: {
-        status: true,
+        status: false,
         user: {}
     },
     reducers: {
-        login: (state) => {
+        login: (state, action) => {
             state.status = true
-            //rest api den gelen veriye göre değiştirebilir. 
+            //rest api den gelen veriye göre değiştirebilir.
+            let { username, user_id, access_token } = action.payload;
             state.user = {
-                name: 'ibrahim',
+                name: username,
                 role: 'customer',
-                email: 'ibr@ibr.com',
-                pass: '123456'
+                email: username,
+                user_id: user_id,
+                access_token: access_token
             }
         },
         register: (state, action) => {
+            console.log(action.payload);
             let { name, email, pass } = action.payload;
             state.status = true
             state.user = {

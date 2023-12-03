@@ -1,22 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ProductData } from "../data/ProductData";
 import Swal from "sweetalert2";
+import { useGetProductByIdQuery } from "../../services/product-api";
 
 
 const productsSlice = createSlice({
     name: 'products',
     initialState: {
-        products: ProductData,
-        carts: ProductData.slice(2, 4),
+        products: [],
+        carts: [],
         favorites: ProductData.slice(1, 4),
         single: null,  // her bir ürün temsil edelr
-
     },
     reducers: {
         //sepete ürün eklemek için kullanılacak
         AddToCart: (state, action) => {
             let { id } = action.payload;
             let sepeteEklenecekUrun = state.carts.find(item => item.id === parseInt(id))
+
             if (sepeteEklenecekUrun === undefined) {
                 //sepete eklemek istediğim ürün bilgilerine getirecek ilgili rest servisi çağırılır
                 let item = state.products.find(item => item.id === parseInt(id))

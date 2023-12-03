@@ -1,13 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector } from "react-redux";
+import {useGetCartQuery} from "../../services/product-api";
 
 const TotalCart = (props) => {
-    let carts = useSelector((state) => state.products.carts);
 
+    let user = useSelector((state) => state.user.user);
+    let {data, isLoading} = useGetCartQuery(user.user_id);
+    let carts = data?.result.cartDetails ?? [];
     const cartTotal = () => {
         return carts.reduce(function (total, item) {
-            return total + ((item.quantity || 1) * item.price)
+            return total + ((item.count || 1) * item.product.price)
         }, 0)
     }
     return (

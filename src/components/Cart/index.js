@@ -1,13 +1,24 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Coupon from './Coupon'
 import TotalCart from './TotalCart'
 import { Link } from 'react-router-dom'
 import img from '../../assets/img/common/empty-cart.png'
 import { useDispatch, useSelector } from "react-redux";
+import {useCreateCartMutation, useGetCartQuery} from "../../services/product-api";
 
 const CartArea = () => {
     let dispatch = useDispatch();
-    let carts = useSelector((state) => state.products.carts);
+    let user = useSelector(state => state.user.user)
+    let {data, isLoading} = useGetCartQuery(user.user_id);
+    let carts = data?.result.cartDetails ?? [];
+
+
+    useEffect(() => {
+        if (!isLoading) {
+            const cart = data.result;
+            console.log(cart);
+        }
+    }, [isLoading]);
     // Remove from Cart
     const rmProduct = (id) => {
         dispatch({ type: "products/removeCart", payload: { id } });
@@ -23,7 +34,7 @@ const CartArea = () => {
 
     return (
         <>
-            {carts.length
+            {isLoading ? <div>Loading...</div> : carts.length
                 ?
                 <section id="cart_area_one" className="ptb-100">
                     <div className="container">
@@ -43,26 +54,26 @@ const CartArea = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {carts.map((data, index) => (
+                                                {data.result.cartDetails.map((data, index) => (
                                                     <tr key={index}>
                                                         <td className="product_remove">
-                                                            <i className="fa fa-trash text-danger" onClick={() => rmProduct(data.id)} style={{ 'cursor': 'pointer' }}></i>
+                                                            <i className="fa fa-trash text-danger" onClick={() => rmProduct(data.product.name)} style={{ 'cursor': 'pointer' }}></i>
                                                         </td>
                                                         <td className="product_thumb">
-                                                            <Link to={`/product-details-one/${data.id}`}>
-                                                                <img src={data.img} alt="img" />
+                                                            <Link to={`/product-details-two/${data.product.productId}`}>
+                                                                <imageUrl src={data.product.imageUrl} alt="imageUrl" />
                                                             </Link>
                                                         </td>
                                                         <td className="product_name">
-                                                            <Link to={`/product-details-one/${data.id}`}>
-                                                                {data.title}
+                                                            <Link to={`/product-details-two/${data.product.productId}`}>
+                                                                {data.product.name}
                                                             </Link>
                                                         </td>
-                                                        <td className="product-price">{data.price}.00 TL</td>
+                                                        <td className="product-price">{data.product.price}.00 TL</td>
                                                         <td className="product_quantity">
-                                                            <input min="1" max="100" type="number" onChange={e => cartValUpdate(e.currentTarget.value, data.id)} defaultValue={data.quantity || 1} />
+                                                            <input min="1" max="100" type="number" onChange={e => cartValUpdate(e.currentTarget.value, data.product.productId)} defaultValue={data.count || 1} />
                                                         </td>
-                                                        <td className="product_total">{data.price * (data.quantity || 1)}.00 TL</td>
+                                                        <td className="product_total">{data.product.price * (data.count || 1)}.00 TL</td>
                                                     </tr>
                                                 ))
 

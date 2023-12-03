@@ -4,6 +4,8 @@ import avater from '../../../assets/img/common/avater.png'
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2';
+import userManager from "../../../userManager";
+import {useGetCartQuery} from "../../../services/product-api";
 
 const TopHeader = () => {
     let dispatch = useDispatch();
@@ -12,10 +14,18 @@ const TopHeader = () => {
     let status = useSelector((state) => state.user.status);
     let user = useSelector((state) => state.user.user);
 
+
     const cikisYap = () => {
 
         console.log("logouta tiklandi");
-        dispatch({ type: "user/logout" })
+        userManager.signoutRedirect();
+        userManager.removeUser();
+        history("/");
+    }
+
+    const login = () => {
+        // since duende uses its own login page, we need to eliminate our custom login page.
+        userManager.signinRedirect();
         history("/");
     }
     return (
@@ -31,10 +41,10 @@ const TopHeader = () => {
                         <div className="col-lg-6 col-md-6 col-sm-12 col-12">
                             <div className="top_header_right">
                                 {
-                                    !status ?
+                                    !status || !user.name ?
                                         <ul className="right_list_fix">
 
-                                            <li><Link to="/login"><i className="fa fa-user"></i>
+                                            <li><Link onClick={login}><i className="fa fa-user"></i>
                                                 Giriş Yap</Link></li>
                                             <li><Link to="/register"><i className="fa fa-lock"></i>
                                                 Kayıt Ol</Link></li>

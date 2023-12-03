@@ -41,8 +41,6 @@ const RegisterArea = () => {
             })
             history("/my-account");
         }
-        
-
     }
     return (
         <>
